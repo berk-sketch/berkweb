@@ -112,13 +112,6 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        // Check if all libraries loaded
-        console.log('React:', typeof React);
-        console.log('ReactDOM:', typeof ReactDOM);
-        console.log('Motion:', typeof window.Motion);
-        console.log('THREE:', typeof THREE);
-        console.log('LucideReact:', typeof window.lucideReact || typeof window.LucideReact);
-
         const { useState, useEffect, useRef } = React;
         const motion = window.Motion ? window.Motion.motion : null;
         const AnimatePresence = window.Motion ? window.Motion.AnimatePresence : null;
@@ -287,8 +280,6 @@
         ];
 
         function ProjectPage({ project, onClose, mouseEnter, mouseLeave }) {
-            console.log('ProjectPage rendered with project:', project?.title);
-            
             React.useEffect(() => {
                 const handleEsc = (e) => {
                     if (e.key === 'Escape') onClose();
@@ -631,9 +622,6 @@
             const [isSubmitting, setIsSubmitting] = useState(false);
             const [submitted, setSubmitted] = useState(false);
 
-            // Debug logging
-            console.log('App rendered, selectedProject:', selectedProject);
-
             useEffect(() => {
                 const timer = setTimeout(() => setLoading(false), 2500);
                 const handleMouseMove = (e) => setMousePos({ x: e.clientX, y: e.clientY });
@@ -972,10 +960,7 @@
                                         exit={{ opacity: 0, scale: 0.9 }}
                                         viewport={{ once: true, margin: "-50px" }}
                                         onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}
-                                        onClick={() => {
-                                            console.log('Project clicked:', project.title);
-                                            setSelectedProject(project);
-                                        }}
+                                        onClick={() => setSelectedProject(project)}
                                         className={`group relative cursor-pointer ${idx % 2 !== 0 ? 'md:mt-48' : ''}`}
                                     >
                                         <div className="overflow-hidden rounded-2xl bg-zinc-200 aspect-[4/5] relative">
@@ -1424,19 +1409,14 @@
                     </footer>
 
                     {/* Project Modal */}
-                    <AnimatePresence>
-                        {selectedProject && (
-                            <>
-                                {console.log('Rendering ProjectPage for:', selectedProject.title)}
-                                <ProjectPage
-                                    project={selectedProject}
-                                    onClose={() => setSelectedProject(null)}
-                                    mouseEnter={mouseEnter}
-                                    mouseLeave={mouseLeave}
-                                />
-                            </>
-                        )}
-                    </AnimatePresence>
+                    {selectedProject && (
+                        <ProjectPage
+                            project={selectedProject}
+                            onClose={() => setSelectedProject(null)}
+                            mouseEnter={mouseEnter}
+                            mouseLeave={mouseLeave}
+                        />
+                    )}
                 </div>
             );
         }
